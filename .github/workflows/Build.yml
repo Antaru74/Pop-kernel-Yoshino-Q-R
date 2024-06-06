@@ -1,0 +1,47 @@
+name: Build Kernel
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout source code
+      uses: actions/checkout@v2
+
+    - name: Set up JDK 8 for any Java-related tools
+      uses: actions/setup-java@v2
+      with:
+        java-version: '8'
+
+    - name: Install required packages
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential bc kmod cpio flex bison libncurses5-dev libssl-dev libelf-dev
+
+    - name: Set up environment variables
+      run: |
+        echo "export ARCH=arm64" >> $GITHUB_ENV
+        echo "export CROSS_COMPILE=aarch64-linux-gnu-" >> $GITHUB_ENV
+
+    - name: Install cross-compiler
+      run: |
+        sudo apt-get install -y gcc-aarch64-linux-gnu
+
+    - name: Build Kernel
+      run: |
+        make lineage-msm8998-yoshino-poplar_defconfig
+        make -j$(nproc)
+        cat arch/arm64/boot/Image arch/arm64/boot/dts/*.dtb > arch/arm64/boot/Image-dtb
+        gzip -c arch/arm64/boot/Image-dtb > arch/arm64/boot/Image.gz-dtb
+
+    - name: Archive build artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: kernel
+        path: arch/arm64/boot/Image.gz-dtb
