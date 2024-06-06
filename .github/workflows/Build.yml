@@ -17,7 +17,7 @@ jobs:
     - name: Set up JDK 8 for any Java-related tools
       uses: actions/setup-java@v2
       with:
-        distribution: 'temurin' # Anda dapat menggunakan 'zulu', 'adopt', atau distribusi lain yang didukung
+        distribution: 'temurin'
         java-version: '8'
 
     - name: Install required packages
@@ -36,7 +36,7 @@ jobs:
 
     - name: Build Kernel
       run: |
-        make lineage-msm8998-yoshino-poplar_defconfig
+        make ARCH=arm64 lineage-msm8998-yoshino-poplar_defconfig
         make -j$(nproc)
         cat arch/arm64/boot/Image arch/arm64/boot/dts/*.dtb > arch/arm64/boot/Image-dtb
         gzip -c arch/arm64/boot/Image-dtb > arch/arm64/boot/Image.gz-dtb
