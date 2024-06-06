@@ -34,6 +34,11 @@ jobs:
       run: |
         sudo apt-get install -y gcc-aarch64-linux-gnu
 
+    - name: Edit kernel configuration
+      run: |
+        sed -i 's/^CONFIG_LITTLE_CPU_MASK=.*/CONFIG_LITTLE_CPU_MASK=15/' arch/arm64/configs/lineage-msm8998-yoshino-poplar_defconfig
+        sed -i 's/^CONFIG_BIG_CPU_MASK=.*/CONFIG_BIG_CPU_MASK=240/' arch/arm64/configs/lineage-msm8998-yoshino-poplar_defconfig
+
     - name: Update kernel configuration
       run: make ARCH=arm64 olddefconfig
 
