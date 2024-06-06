@@ -34,10 +34,12 @@ jobs:
       run: |
         sudo apt-get install -y gcc-aarch64-linux-gnu
 
+    - name: Update kernel configuration
+      run: make ARCH=arm64 olddefconfig
+
     - name: Build Kernel
       run: |
-        make ARCH=arm64 lineage-msm8998-yoshino-poplar_defconfig
-        make -j$(nproc)
+        make ARCH=arm64 -j$(nproc)
         cat arch/arm64/boot/Image arch/arm64/boot/dts/*.dtb > arch/arm64/boot/Image-dtb
         gzip -c arch/arm64/boot/Image-dtb > arch/arm64/boot/Image.gz-dtb
 
