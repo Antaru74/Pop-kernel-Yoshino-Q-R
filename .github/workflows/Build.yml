@@ -17,6 +17,7 @@ jobs:
     - name: Set up JDK 8 for any Java-related tools
       uses: actions/setup-java@v2
       with:
+        distribution: 'temurin' # Anda dapat menggunakan 'zulu', 'adopt', atau distribusi lain yang didukung
         java-version: '8'
 
     - name: Install required packages
