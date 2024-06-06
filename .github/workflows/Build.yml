@@ -2,9 +2,9 @@ name: Build Kernel
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ Q-r6-p ]
   pull_request:
-    branches: [ main, master ]
+    branches: [ Q-r6-p ]
 
 jobs:
   build:
